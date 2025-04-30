@@ -21,6 +21,8 @@ def call_model(user_message):
 
             Se o "type" for 'GET_LATEST_MATCHES', o response_type deve ser 'latestMatches' e a resposta deve ser uma lista de json com as informações das partidas como data, hora, torneio, oponente e score.
             Se o "type" for 'GET_LINEUP', o response_type deve ser 'lineUp' e a resposta deve ser uma lista de json com os nomes dos jogadores.
+            Se o "type" for 'GET_NEXT_MATCHES', o response_type deve ser 'nextMatches' e a resposta deve ser uma lista de json com as informações das partidas.
+            Se o "type" for 'GET_NEXT_TOURNAMENTS', o response_type deve ser 'nextTournaments' e a resposta deve ser uma lista de json contendo nome e data do torneio.
 
             Exemplo de perguntas:
             {'type': 'GET_LASTEST_MATCHES', 'md_content': 
@@ -51,6 +53,15 @@ def call_model(user_message):
             ![Image 6: BR](https://static.draft5.gg/assets/flags/BR.svg)skullz
 
             ![Image 7: BR](https://static.draft5.gg/assets/flags/BR.svg)chelo
+            }  
+
+            {'type': 'GET_NEXT_MATCHES', 'md_content': 
+            'Jogos
+            ----------
+
+            📅 quarta-feira, 9 de abril de 2025
+
+            [09:50 ![Image 8: 330](https://api.draft5.gg/teams/330/logo)FURIA 0 ![Image 9: 2635](https://api.draft5.gg/teams/2635/logo)(algum time...) 0 MD3 (algum torneio...) Reveja os lances](algum link...)'
             }
 
             Exemplo de resposta:
@@ -78,6 +89,19 @@ def call_model(user_message):
                     }
                 ]
             }
+
+            {'nextTournaments': [
+                        {
+                            'name': 'PGL Astana 2025',
+                            'date': '2025/05/10 - 2025/05/18'
+                    }
+                ]
+            }
+            
+            Para o 'nextMatches', repita o formato do latestMatches...
+            Sempre crie JSON com formatos válidos, como as chaves contendo aspas duplas.
+
+            Caso não encontrar qualquer uma das informações, preencha a resposta como null
             '''
         },
         {'role': 'user', 'content': user_message}
