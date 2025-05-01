@@ -28,28 +28,68 @@ def fetch_local_cache(data, json_file: str):
     return json_cache
 
 
-def create_reply_message(api_data: dict):
-    latest_matches = api_data.get('latestMatches', [])
-    lineup = api_data.get('lineUp', [])
-    next_matches = api_data.get('nextMatches', [])
-    tournaments = api_data.get('nextTournaments', [])
+def create_reply_message(api_data: dict, json_key):
+    match json_key:
+        case 'latestMatches':
+            latest_matches = api_data.get('latestMatches', [])
+            if not latest_matches:
+                return 'Nenhuma partida encontrada ‼️'
 
-    if latest_matches:
-        message = '🎯 *Partidas anteriores da FURIA:*\n\n'
-        for matches in latest_matches:
-            opponent = matches.get('opponent')
-            score = matches.get('score')
-            tournament = matches.get('tournament')
-            win = matches.get('win')
-            date = matches.get('date')
+            message = '🎯 *Partidas anteriores da FURIA:*\n\n'
+            for match in latest_matches:
+                opponent = match.get('opponent')
+                score = match.get('score')
+                tournament = match.get('tournament')
+                win = match.get('win')
+                date = match.get('date')
+                symbol = '✔️' if win == 'true' else '❌'
+                message += (
+                    f"🕹️ *{tournament}*\n"
+                    f"📆 {date}\n"
+                    f"⚔️ *FURIA vs {opponent}*\n"
+                    f"🏁 {score}\n"
+                    f"Vitória: {symbol}\n\n"
+                )
+            return message.strip()
 
-            if win == 'true':
-                symbol = '✔️'
-            else:
-                symbol = '❌'
-            message += f"🕹️ *{tournament}*\n 📆 {date}\n ⚔️ *FURIA vs {opponent}*\n 🏁 {score}\n Vitória: {symbol}\n\n"
+        case 'lineUp':
+            lineup = api_data.get('lineUp', [])
+            if not lineup:
+                return 'Nenhuma equipe encontrada ‼️'
 
-    return message.strip()
+            message = '👾 *Lineup da FURIA:*\n'
+            for team in lineup:
+                for key, members in team.items():
+                    message += f'\n🎖️ *{key.upper()}*\n\n'
+                    message += '\n'.join(members) + '\n'
+            return message.strip()
+
+        case 'nextMatches':
+            next_matches = api_data.get('nextMatches', [])
+            if not next_matches:
+                return 'Nenhuma partida encontrada ‼️'
+
+            message = '🎯 *Próximas partidas da FURIA:*\n\n'
+            for match in next_matches:
+                opponent = match.get('opponent')
+                tournament = match.get('tournament')
+                date = match.get('date')
+                message += (
+                    f"🕹️ *{tournament}*\n"
+                    f"📆 {date}\n"
+                    f"⚔️ *FURIA vs {opponent}*\n\n"
+                )
+            return message.strip()
+
+        case 'nextTournaments':
+            tournaments = api_data.get('nextTournaments', [])
+            if not tournaments:
+                return 'Nenhum torneio encontrado ‼️'
+
+            message = '🏆 *Próximos torneios da FURIA*:\n\n'
+            for t in tournaments:
+                message += f"*{t.get('name')}*\n{t.get('date')}\n\n"
+            return message.strip()
 
 
 def get_latest_matches():
@@ -59,7 +99,7 @@ def get_latest_matches():
     data = fetch_local_cache(data=response, json_file=cache_file)
     if not data:
         data = 'Oops! Something went wrong, try again later'
-    return create_reply_message(data)
+    return create_reply_message(data, 'latestMatches')
 
 
 def get_lineup():
@@ -69,7 +109,7 @@ def get_lineup():
     data = fetch_local_cache(data=response, json_file=cache_file)
     if not data:
         data = 'Oops! Something went wrong, try again later'
-    return data
+    return create_reply_message(data, 'lineUp')
 
 def get_next_matches():
     cache_file = CACHE_FOLDER + 'next_matches.json'
@@ -78,14 +118,14 @@ def get_next_matches():
     data = fetch_local_cache(data=response, json_file=cache_file)
     if not data:
         data = 'Oops! Something went wrong, try again later'
-    return data
+    return create_reply_message(data, 'nextMatches')
 
 def get_next_tournaments():
     url = 'https://r.jina.ai/https://draft5.gg/equipe/330-FURIA/campeonatos'
     cache_file = CACHE_FOLDER + 'next_tournaments.json'
     task_context = 'GET_NEXT_TOURNAMENTS'
-    response = get_scrapped(task_context, cache_file)
-    data = fetch_local_cache(data=response, json_file=cache_file, url=url)
+    response = get_scrapped(task_context, cache_file, url=url)
+    data = fetch_local_cache(data=response, json_file=cache_file)
     if not data:
         data = 'Oops! Something went wrong, try again later'
-    return data
+    return create_reply_message(data, 'nextTournaments')
