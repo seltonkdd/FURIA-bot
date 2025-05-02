@@ -20,12 +20,3 @@ def get_scrapped(context, cache_file, url=URL):
         response = response.replace('`', '').replace('json', '')
 
     return response
-
-    # data = fetch_local_cache(data=response, json_file=cache_file)
-    # if not data:
-    #     data = 'Oops! Something went wrong, try again later'
-    #     print(data)
-
-
-
-

@@ -98,7 +98,7 @@ def call_model(user_message):
                 ]
             }
             
-            Para o 'nextMatches', repita o formato do latestMatches...
+            Para o 'nextMatches', repita o formato de latestsMatches com excessao dos campos score e win...
             Sempre crie JSON com formatos válidos, como as chaves contendo aspas duplas.
 
             Caso não encontrar qualquer uma das informações, preencha a resposta como null
