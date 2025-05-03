@@ -1,7 +1,25 @@
 import json
+import os
 
 from .scrappers import get_scrapped
-from config import CACHE_FOLDER
+from.scheduler import start_scheduler
+from config import CACHE_FOLDER, TOKEN
+
+
+def create_lock_file(lock_path='scheduler.lock'):
+    with open(lock_path, 'w') as f:
+        f.write('scheduler started')
+
+
+def is_scheduler_locked(lock_path='scheduler.lock'):
+    return os.path.exists(lock_path)
+
+
+def try_start_scheduler(token):
+    if not is_scheduler_locked():
+        start_scheduler(token)
+        create_lock_file()
+        print('Scheduler iniciado...')
 
 
 def fetch_local_cache(data, json_file: str):
@@ -122,6 +140,9 @@ def get_next_matches():
     task_context = 'GET_NEXT_MATCHES'
     response = get_scrapped(task_context, cache_file)
     data = fetch_local_cache(data=response, json_file=cache_file)
+
+    try_start_scheduler(TOKEN)
+
     if data:
         return create_reply_message(data, 'nextMatches')
     else:

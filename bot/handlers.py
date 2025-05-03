@@ -13,7 +13,7 @@ from config import ID_FILE
 start_message = '''*SEJA BEM VINDO AO FURIA BOT* ✨ !!!\n\n
 O mais famoso bot de informações do seu time de CS favorito 🕹️😍\n
 Aperte "MENU" para mostrar o menu de comandos.\n\n
-Digite /alert_on ou /alert_off para ligar ou desligar as notificações de novas partidas'''
+Digite /on ou /off para ligar ou desligar as notificações de novas partidas'''
 
 menu_message = '''ESCOLHA UMA DAS SEGUINTES OPÇÕES:\n\n
 *PARTIDAS RECENTES* - Mostra as 5 ultimas partidas da equipe!\n\n
@@ -115,6 +115,6 @@ async def query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 def setup_handler(application):
 
     application.add_handler(CommandHandler('start', start))
-    application.add_handler(CommandHandler('alert_on', alert_on))
-    application.add_handler(CommandHandler('alert_off', alert_off))
+    application.add_handler(CommandHandler('on', alert_on))
+    application.add_handler(CommandHandler('off', alert_off))
     application.add_handler(CallbackQueryHandler(query_handler))

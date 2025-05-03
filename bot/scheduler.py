@@ -35,14 +35,17 @@ def job_wrapper(token, link):
 def start_scheduler(token):
     scheduler = BackgroundScheduler(timezone='America/Sao_Paulo')
 
-    with open(f'{CACHE_FOLDER}next_matches.json', 'r') as f:
-        data = json.load(f)
+    try:
+        with open(f'{CACHE_FOLDER}next_matches.json', 'r') as f:
+            data = json.load(f)
 
-    target_str = data.get('nextMatches')[0]['date'].replace('BRT', '').strip()
-    target_date = datetime.strptime(target_str, '%Y/%m/%d - %H:%M')
-    notify_time = target_date - timedelta(minutes=15)
+        target_str = data.get('nextMatches')[0]['date'].replace('BRT', '').strip()
+        target_date = datetime.strptime(target_str, '%Y/%m/%d - %H:%M')
+        notify_time = target_date - timedelta(minutes=15)
 
-    link = data.get('nextMatches')[0]['match_link']
+        link = data.get('nextMatches')[0]['match_link']
+    except:
+        return
 
     scheduler.add_job(
         job_wrapper,

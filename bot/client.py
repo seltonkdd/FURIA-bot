@@ -17,7 +17,8 @@ def call_model(user_message):
             E o valor da chave "md_content" contém o conteudo html estilizado como markdown de um site no qual você irá buscar as informações.
             O conteudo do site é informações sobre o time de CS Furia, suas partidas ou sua line-up.
             Você deve responder diretamente apenas o que lhe for atribuido.
-            Sua resposta deve ser um JSON.
+            Sua resposta deve ser APENAS um JSON DIRETO. Nada mais.
+            Não comece com 'Para conseguirmos identificar..' ou coisas do tipo.
 
             Se o "type" for 'GET_LATEST_MATCHES', o response_type deve ser 'latestMatches' e a resposta deve ser uma lista de json com as informações das partidas como data, hora, torneio, oponente e score.
             Se o "type" for 'GET_LINEUP', o response_type deve ser 'lineUp' e a resposta deve ser uma lista de json com os nomes dos jogadores.
