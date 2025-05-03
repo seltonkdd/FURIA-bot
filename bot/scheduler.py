@@ -1,5 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import asyncio
 import json
 

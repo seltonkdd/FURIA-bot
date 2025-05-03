@@ -12,7 +12,8 @@ from config import ID_FILE
 
 start_message = '''*SEJA BEM VINDO AO FURIA BOT* ✨ !!!\n\n
 O mais famoso bot de informações do seu time de CS favorito 🕹️😍\n
-Aperte "MENU" para mostrar o menu de comandos.'''
+Aperte "MENU" para mostrar o menu de comandos.\n\n
+Digite /alert_on ou /alert_off para ligar ou desligar as notificações de novas partidas'''
 
 menu_message = '''ESCOLHA UMA DAS SEGUINTES OPÇÕES:\n\n
 *PARTIDAS RECENTES* - Mostra as 5 ultimas partidas da equipe!\n\n
@@ -22,11 +23,13 @@ menu_message = '''ESCOLHA UMA DAS SEGUINTES OPÇÕES:\n\n
 
 menu_button = [[InlineKeyboardButton('MENU', callback_data='menu')]]
 
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                   reply_markup=InlineKeyboardMarkup(menu_button), 
-                                   text=start_message, 
+    await context.bot.send_message(chat_id=update.effective_chat.id,
+                                   reply_markup=InlineKeyboardMarkup(menu_button),
+                                   text=start_message,
                                    parse_mode='Markdown')
+
 
 async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     buttons = [
@@ -34,10 +37,10 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         [InlineKeyboardButton('LINEUP', callback_data='lineup')],
         [InlineKeyboardButton('PROXIMAS PARTIDAS', callback_data='next')],
         [InlineKeyboardButton('TORNEIOS', callback_data='tournaments')]
-        ]
-    await context.bot.send_message(chat_id=update.effective_chat.id, 
-                                   reply_markup=InlineKeyboardMarkup(buttons), 
-                                   text=menu_message, 
+    ]
+    await context.bot.send_message(chat_id=update.effective_chat.id,
+                                   reply_markup=InlineKeyboardMarkup(buttons),
+                                   text=menu_message,
                                    parse_mode='Markdown')
 
 
@@ -48,6 +51,7 @@ async def latests(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                    text=message,
                                    parse_mode='Markdown')
 
+
 async def lineup(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = get_lineup()
     await context.bot.send_message(chat_id=update.effective_chat.id,
@@ -55,20 +59,23 @@ async def lineup(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                    text=message,
                                    parse_mode='Markdown')
 
+
 async def next(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = get_next_matches()
     await context.bot.send_message(chat_id=update.effective_chat.id,
                                    reply_markup=InlineKeyboardMarkup(menu_button),
                                    text=message,
                                    parse_mode='Markdown')
-    
+
+
 async def tournaments(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = get_next_tournaments()
     await context.bot.send_message(chat_id=update.effective_chat.id,
                                    reply_markup=InlineKeyboardMarkup(menu_button),
                                    text=message,
                                    parse_mode='Markdown')
-    
+
+
 async def alert_on(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = str(update.effective_chat.id)
     with open(ID_FILE, 'r+') as f:
@@ -77,6 +84,7 @@ async def alert_on(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             f.write(f'{chat_id}\n')
 
     await context.bot.send_message(chat_id=chat_id, text='_Notificações ativadas!_', parse_mode='Markdown')
+
 
 async def alert_off(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = str(update.effective_chat.id)
@@ -88,6 +96,7 @@ async def alert_off(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             f.writelines(f'{id}\n' for id in ids)
 
     await context.bot.send_message(chat_id=chat_id, text='_Notificações desativadas!_', parse_mode='Markdown')
+
 
 async def query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query.data

@@ -1,4 +1,3 @@
-import requests
 import json
 
 from .scrappers import get_scrapped
@@ -117,6 +116,7 @@ def get_lineup():
     else:
         return 'Oops! Something went wrong, try again later'
 
+
 def get_next_matches():
     cache_file = CACHE_FOLDER + 'next_matches.json'
     task_context = 'GET_NEXT_MATCHES'
@@ -126,6 +126,7 @@ def get_next_matches():
         return create_reply_message(data, 'nextMatches')
     else:
         return 'Oops! Something went wrong, try again later'
+
 
 def get_next_tournaments():
     url = 'https://r.jina.ai/https://draft5.gg/equipe/330-FURIA/campeonatos'

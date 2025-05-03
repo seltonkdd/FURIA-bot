@@ -1,9 +1,8 @@
 from telegram.ext import ApplicationBuilder
-from telegram import Update
 
 import os
 
-from config import *
+from config import ID_FILE, TOKEN
 from bot.handlers import setup_handler
 from bot.scheduler import start_scheduler
 
