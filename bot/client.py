@@ -98,7 +98,9 @@ def call_model(user_message):
                 ]
             }
             
-            Para o 'nextMatches', repita o formato de latestsMatches com excessao dos campos score e win...
+            Para o 'nextMatches', repita o formato de latestsMatches com excessao dos campos score e win... e adicione um novo campo que é o link da partida.
+            Exemplo "match_link": 'https://draft5.gg/partida/...'
+            
             Sempre crie JSON com formatos válidos, como as chaves contendo aspas duplas.
 
             Caso não encontrar qualquer uma das informações, preencha a resposta como null

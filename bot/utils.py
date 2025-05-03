@@ -2,8 +2,7 @@ import requests
 import json
 
 from .scrappers import get_scrapped
-
-CACHE_FOLDER = 'cache/'
+from config import CACHE_FOLDER
 
 
 def fetch_local_cache(data, json_file: str):
@@ -75,10 +74,12 @@ def create_reply_message(api_data, json_key):
                     opponent = match.get('opponent')
                     tournament = match.get('tournament')
                     date = match.get('date')
+                    link = match.get('match_link')
                     message += (
                         f"🕹️ *{tournament}*\n"
                         f"📆 {date}\n"
-                        f"⚔️ *FURIA vs {opponent}*\n\n"
+                        f"⚔️ *FURIA vs {opponent}*\n"
+                        f"🎥 Link da transmissão: {link}\n\n"
                     )
                 return message.strip()
 
