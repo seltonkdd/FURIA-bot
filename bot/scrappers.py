@@ -4,10 +4,7 @@ import os
 from .client import call_model
 
 
-URL = 'https://r.jina.ai/https://draft5.gg/equipe/330-FURIA'
-
-
-def get_scrapped(context, cache_file, url=URL):
+def get_scrapped(context, cache_file, url):
     response = None
 
     if not os.path.exists(cache_file):

@@ -114,9 +114,10 @@ def create_reply_message(api_data, json_key):
 
 
 def get_latest_matches():
+    url = 'https://r.jina.ai/https://draft5.gg/equipe/330-FURIA/resultados'
     cache_file = CACHE_FOLDER + 'latest_matches.json'
     task_context = 'GET_LATEST_MATCHES'
-    response = get_scrapped(task_context, cache_file)
+    response = get_scrapped(task_context, cache_file, url=url)
     data = fetch_local_cache(data=response, json_file=cache_file)
     if data:
         return create_reply_message(data, 'latestMatches')
@@ -136,9 +137,10 @@ def get_lineup():
 
 
 def get_next_matches():
+    url = 'https://r.jina.ai/https://draft5.gg/equipe/330-FURIA/proximas-partidas'
     cache_file = CACHE_FOLDER + 'next_matches.json'
     task_context = 'GET_NEXT_MATCHES'
-    response = get_scrapped(task_context, cache_file)
+    response = get_scrapped(task_context, cache_file, url=url)
     data = fetch_local_cache(data=response, json_file=cache_file)
 
     try_start_scheduler(TOKEN)
