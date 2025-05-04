@@ -52,9 +52,13 @@ Crie um arquivo `.env` e adicione sua chaves privadas da Groq API e o token de b
 
     python main.py
 
+Acesse seu bot e utilze-o
+
 #### Alguns exemplos de comandos:
+
 `/start` Da inicio ao bot
+
 `/on` Ativa as notificações automaticas
+
 `/off` Desativa as notificações automáticas
 
-Acesse seu bot e utilze-o
