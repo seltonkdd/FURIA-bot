@@ -9,7 +9,7 @@ GROQ_KEY = os.getenv('GROQ_KEY')
 model = Groq(api_key=GROQ_KEY)
 
 def call_model(user_message):
-    response_format = {'response_type': 'list_object'}
+    response_format = {"type": "json_object"}
     messages = [
         {   
             'role': 'system', 'content': '''Voce é um assistente que irá receber um json com uma chave "type" e uma chave "md_content".
