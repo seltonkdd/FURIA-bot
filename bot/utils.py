@@ -1,25 +1,7 @@
 import json
-import os
 
 from .scrappers import get_scrapped
-from.scheduler import start_scheduler
-from config import CACHE_FOLDER, TOKEN
-
-
-def create_lock_file(lock_path='scheduler.lock'):
-    with open(lock_path, 'w') as f:
-        f.write('scheduler started')
-
-
-def is_scheduler_locked(lock_path='scheduler.lock'):
-    return os.path.exists(lock_path)
-
-
-def try_start_scheduler(token):
-    if not is_scheduler_locked():
-        start_scheduler(token)
-        create_lock_file()
-        print('Scheduler iniciado...')
+from config import CACHE_FOLDER
 
 
 def fetch_local_cache(data, json_file: str):
@@ -113,51 +95,56 @@ def create_reply_message(api_data, json_key):
         return f'{e}'
 
 
-def get_latest_matches():
+def get_latest_matches(scheduled=False):
     url = 'https://r.jina.ai/https://draft5.gg/equipe/330-FURIA/resultados'
     cache_file = CACHE_FOLDER + 'latest_matches.json'
     task_context = 'GET_LATEST_MATCHES'
     response = get_scrapped(task_context, cache_file, url=url)
     data = fetch_local_cache(data=response, json_file=cache_file)
-    if data:
+    if data and not scheduled:
         return create_reply_message(data, 'latestMatches')
-    else:
+    elif data and scheduled:
+        return
+    elif not data:
         return 'Oops! Something went wrong, try again later'
 
 
-def get_lineup():
+def get_lineup(scheduled=False):
     cache_file = CACHE_FOLDER + 'lineup.json'
     task_context = 'GET_LINEUP'
     response = get_scrapped(task_context, cache_file)
     data = fetch_local_cache(data=response, json_file=cache_file)
-    if data:
+    if data and not scheduled:
         return create_reply_message(data, 'lineUp')
-    else:
+    elif data and scheduled:
+        return
+    elif not data:
         return 'Oops! Something went wrong, try again later'
 
 
-def get_next_matches():
+def get_next_matches(scheduled=False):
     url = 'https://r.jina.ai/https://draft5.gg/equipe/330-FURIA/proximas-partidas'
     cache_file = CACHE_FOLDER + 'next_matches.json'
     task_context = 'GET_NEXT_MATCHES'
     response = get_scrapped(task_context, cache_file, url=url)
     data = fetch_local_cache(data=response, json_file=cache_file)
-
-    try_start_scheduler(TOKEN)
-
-    if data:
+    if data and not scheduled:
         return create_reply_message(data, 'nextMatches')
-    else:
+    elif data and scheduled:
+        return
+    elif not data:
         return 'Oops! Something went wrong, try again later'
 
 
-def get_next_tournaments():
+def get_next_tournaments(scheduled=False):
     url = 'https://r.jina.ai/https://draft5.gg/equipe/330-FURIA/campeonatos'
     cache_file = CACHE_FOLDER + 'next_tournaments.json'
     task_context = 'GET_NEXT_TOURNAMENTS'
     response = get_scrapped(task_context, cache_file, url=url)
     data = fetch_local_cache(data=response, json_file=cache_file)
-    if data:
+    if data and not scheduled:
         return create_reply_message(data, 'nextTournaments')
-    else:
+    elif data and scheduled:
+        return
+    elif not data:
         return 'Oops! Something went wrong, try again later'
